@@ -1,0 +1,11 @@
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/bin/Debug/net9.0/RealTimeChat.Domain.deps.json
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/bin/Debug/net9.0/RealTimeChat.Domain.dll
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/bin/Debug/net9.0/RealTimeChat.Domain.pdb
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/RealTimeChat.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/RealTimeChat.Domain.AssemblyInfoInputs.cache
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/RealTimeChat.Domain.AssemblyInfo.cs
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/RealTimeChat.Domain.csproj.CoreCompileInputs.cache
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/RealTimeChat.Domain.dll
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/refint/RealTimeChat.Domain.dll
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/RealTimeChat.Domain.pdb
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Domain/obj/Debug/net9.0/ref/RealTimeChat.Domain.dll
