@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChatHeader from "./components/ChatHeader";
 import MessageInput from "./components/MessageInput";
 import MessageList from "./components/MessageList";
@@ -6,6 +6,18 @@ import MessageList from "./components/MessageList";
 function ChatPage() {
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const savedUsername = localStorage.getItem("username");
+
+    if (savedUsername) {
+      setUsername(savedUsername);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("username", username);
+  }, [username]);
 
   function handleSendMessage(text) {
     if (!username.trim()) {
