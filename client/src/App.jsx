@@ -1,11 +1,9 @@
 import React from "react";
+import ChatPage from "./src/features/chat/ChatPage";
 
 function App() {
   return (
-    <div>
-      <h1>Real-Time Chat</h1>
-      <p>Frontend setup is working.</p>
-    </div>
+    <ChatPage />
   );
 }
 

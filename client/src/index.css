@@ -2,11 +2,67 @@
   font-family: Arial, sans-serif;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-}
-
 * {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+main {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: white;
+  border-radius: 12px;
+}
+
+header,
+section {
+  margin-bottom: 24px;
+}
+
+form {
+  display: flex;
+  gap: 12px;
+}
+
+input {
+  flex: 1;
+  padding: 12px;
+}
+
+button {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 12px;
+  margin-bottom: 12px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+}
+
+li div:first-child {
+  margin-bottom: 6px;
+}
+
+li div:last-child {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+input[placeholder="Enter your name..."] {
+  margin-top: 8px;
+  margin-bottom: 16px;
 }
