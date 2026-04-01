@@ -66,3 +66,7 @@ input[placeholder="Enter your name..."] {
   margin-top: 8px;
   margin-bottom: 16px;
 }
+
+header p:last-child {
+  font-weight: bold;
+}

@@ -6,6 +6,8 @@ import MessageList from "./components/MessageList";
 function ChatPage() {
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState([]);
+//   const [connectionStatus, setConnectionStatus] = useState("Not connected");
+  const [connectionStatus] = useState("Not connected");
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -36,7 +38,7 @@ function ChatPage() {
 
   return (
     <main>
-      <ChatHeader />
+      <ChatHeader connectionStatus={connectionStatus} />
 
       <section>
         <h2>Your Name</h2>
