@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import ChatHeader from "./components/ChatHeader";
 import MessageInput from "./components/MessageInput";
 import MessageList from "./components/MessageList";
+import { createChatConnection } from "../../services/signalrConnection";
 
 function ChatPage() {
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState([]);
-//   const [connectionStatus, setConnectionStatus] = useState("Not connected");
-  const [connectionStatus] = useState("Not connected");
+  const [connectionStatus, setConnectionStatus] = useState("Disconnected");
+  const connection = createChatConnection();
+
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -20,6 +22,30 @@ function ChatPage() {
   useEffect(() => {
     localStorage.setItem("username", username);
   }, [username]);
+  
+useEffect(() => {
+
+  const startConnection = async () => {
+    try {
+      setConnectionStatus("Connecting");
+      await connection.start();
+      setConnectionStatus("Connected");
+    } catch (error) {
+      console.error("Failed to connect to SignalR:", error);
+      setConnectionStatus("Disconnected");
+    }
+  };
+
+  startConnection();
+
+  connection.on("ReceiveMessage", (message) => {
+    setMessages((prev) => [...prev, message]);
+   });
+
+  return () => {
+    connection.stop();
+  };
+}, []);
 
   function handleSendMessage(text) {
     if (!username.trim()) {
@@ -33,7 +59,7 @@ function ChatPage() {
       sentAt: new Date().toLocaleTimeString(),
     };
 
-    setMessages((currentMessages) => [...currentMessages, newMessage]);
+  setMessages((currentMessages) => [...currentMessages, newMessage]); 
   }
 
   return (
