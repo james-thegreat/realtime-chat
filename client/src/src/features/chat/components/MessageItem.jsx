@@ -2,10 +2,10 @@ function MessageItem({ message }) {
   return (
     <li>
       <div>
-        <strong>{message.sender}</strong>
+        <strong>{message.userName}</strong>
       </div>
       <div>{message.text}</div>
-      <div>{message.sentAt}</div>
+      <div>{message.sentAtUtc}</div>
     </li>
   );
 }
