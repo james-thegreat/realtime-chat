@@ -33,7 +33,7 @@ function ChatPage() {
         id: message.id || Date.now() + Math.random(),
         userName: message.userName,
         text: message.text,
-        sentAtUtc: message.sentAtUtc,
+        sentAtUtc: message.sentAtUtc ?? message.sentAtUTC,
       };
 
       setMessages((prev) => [...prev, safeMessage]);

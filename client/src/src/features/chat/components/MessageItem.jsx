@@ -5,7 +5,11 @@ function MessageItem({ message }) {
         <strong>{message.userName}</strong>
       </div>
       <div>{message.text}</div>
-      <div>{message.sentAtUtc}</div>
+      <div>
+        {message.sentAtUtc
+         ? new Date(message.sentAtUtc).toLocaleTimeString()
+          : "—"}
+      </div>
     </li>
   );
 }

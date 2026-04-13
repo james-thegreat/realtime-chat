@@ -20,12 +20,21 @@ public class ChatHub : Hub
 
     public async Task SendMessage(ChatMessage message)
     {
+        if (string.IsNullOrWhiteSpace(message.UserName) ||
+            string.IsNullOrWhiteSpace(message.Text))
+        {
+            return;
+        }
+
         var chatMessage = new ChatMessage
         {
             UserName = message.UserName,
             Text = message.Text,
             SentAtUtc = DateTime.UtcNow
         };
+
+        Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, SentAtUtc={chatMessage.SentAtUtc:o}");
+
         await Clients.All.SendAsync("ReceiveMessage", chatMessage);
     }
 }
