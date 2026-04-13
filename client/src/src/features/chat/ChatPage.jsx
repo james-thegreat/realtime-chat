@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatHeader from "./components/ChatHeader";
 import MessageInput from "./components/MessageInput";
 import MessageList from "./components/MessageList";
@@ -7,9 +7,8 @@ import { createChatConnection } from "../../services/signalrConnection";
 function ChatPage() {
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState([]);
-  const [connectionStatus, setConnectionStatus] = useState("Disconnected");
-  const connection = createChatConnection();
-
+  const [connectionStatus, setConnectionStatus] = useState("Connecting");
+  const connectionRef = useRef(null);
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -22,33 +21,55 @@ function ChatPage() {
   useEffect(() => {
     localStorage.setItem("username", username);
   }, [username]);
-  
-useEffect(() => {
 
-  const startConnection = async () => {
-    try {
-      setConnectionStatus("Connecting");
-      await connection.start();
-      setConnectionStatus("Connected");
-    } catch (error) {
-      console.error("Failed to connect to SignalR:", error);
-      setConnectionStatus("Disconnected");
+  useEffect(() => {
+    const connection = createChatConnection();
+    connectionRef.current = connection;
+
+    connection.on("ReceiveMessage", (message) => {
+      console.log("Received from hub:", message);
+
+      const safeMessage = {
+        ...message,
+        id: message.id || Date.now() + Math.random(),
+      };
+
+      setMessages((prev) => [...prev, safeMessage]);
+    });
+
+    const startConnection = async () => {
+      try {
+        console.log("Starting SignalR connection...");
+        await connection.start();
+        console.log("SignalR connected");
+        setConnectionStatus("Connected");
+      } catch (error) {
+        console.error("Failed to connect to SignalR:", error);
+        setConnectionStatus("Disconnected");
+      }
+    };
+
+    startConnection();
+
+    return () => {
+      connection.off("ReceiveMessage");
+      connection.stop();
+    };
+  }, []);
+
+  async function handleSendMessage(text) {
+    console.log("handleSendMessage fired");
+    console.log("username:", username);
+    console.log("text:", text);
+    console.log("connection state:", connectionRef.current?.state);
+
+    if (!username.trim() || !text.trim()) {
+      console.log("blocked by validation");
+      return;
     }
-  };
 
-  startConnection();
-
-  connection.on("ReceiveMessage", (message) => {
-    setMessages((prev) => [...prev, message]);
-   });
-
-  return () => {
-    connection.stop();
-  };
-}, []);
-
-  function handleSendMessage(text) {
-    if (!username.trim()) {
+    if (!connectionRef.current || connectionStatus !== "Connected") {
+      console.log("blocked: connection not ready");
       return;
     }
 
@@ -59,8 +80,16 @@ useEffect(() => {
       sentAt: new Date().toLocaleTimeString(),
     };
 
-  setMessages((currentMessages) => [...currentMessages, newMessage]); 
+    try {
+      console.log("about to invoke SendMessage", newMessage);
+      await connectionRef.current.invoke("SendMessage", newMessage);
+      console.log("invoke succeeded");
+    } catch (error) {
+      console.error("invoke failed:", error);
+    }
   }
+
+  console.log("Messages state:", messages);
 
   return (
     <main>
