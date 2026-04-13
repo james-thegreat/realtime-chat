@@ -30,8 +30,10 @@ function ChatPage() {
       console.log("Received from hub:", message);
 
       const safeMessage = {
-        ...message,
         id: message.id || Date.now() + Math.random(),
+        userName: message.userName,
+        text: message.text,
+        sentAtUtc: message.sentAtUtc,
       };
 
       setMessages((prev) => [...prev, safeMessage]);
