@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
+using RealTimeChat.Api.Models;
 
 namespace RealTimeChat.Api.Hubs;
 
@@ -17,12 +18,7 @@ public class ChatHub : Hub
         await base.OnDisconnectedAsync(exception);
     }
 
-    // public async Task SendMessage(object message)
-    // {
-    //     await Clients.All.SendAsync("ReceiveMessage", message);
-    // }
-
-    public async Task SendMessage(object message)
+    public async Task SendMessage(ChatMessage message)
     {
         Console.WriteLine("🔥 SendMessage hit");
         await Clients.All.SendAsync("ReceiveMessage", message);
