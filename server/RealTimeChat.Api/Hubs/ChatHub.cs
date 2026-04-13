@@ -20,7 +20,12 @@ public class ChatHub : Hub
 
     public async Task SendMessage(ChatMessage message)
     {
-        Console.WriteLine("🔥 SendMessage hit");
-        await Clients.All.SendAsync("ReceiveMessage", message);
+        var chatMessage = new ChatMessage
+        {
+            UserName = message.UserName,
+            Text = message.Text,
+            SentAtUtc = DateTime.UtcNow
+        };
+        await Clients.All.SendAsync("ReceiveMessage", chatMessage);
     }
 }

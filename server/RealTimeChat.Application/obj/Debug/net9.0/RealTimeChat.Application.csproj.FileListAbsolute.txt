@@ -13,3 +13,4 @@
 /Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Application/obj/Debug/net9.0/refint/RealTimeChat.Application.dll
 /Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Application/obj/Debug/net9.0/RealTimeChat.Application.pdb
 /Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Application/obj/Debug/net9.0/ref/RealTimeChat.Application.dll
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Application/obj/Debug/net9.0/RealTimeChat.Application.sourcelink.json

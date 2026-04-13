@@ -13,3 +13,4 @@
 /Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Infrastructure/obj/Debug/net9.0/refint/RealTimeChat.Infrastructure.dll
 /Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Infrastructure/obj/Debug/net9.0/RealTimeChat.Infrastructure.pdb
 /Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Infrastructure/obj/Debug/net9.0/ref/RealTimeChat.Infrastructure.dll
+/Users/jamesdunlop/Desktop/Chat App/realtime-chat/server/RealTimeChat.Infrastructure/obj/Debug/net9.0/RealTimeChat.Infrastructure.sourcelink.json
