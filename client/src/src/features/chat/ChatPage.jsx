@@ -74,10 +74,8 @@ function ChatPage() {
     }
 
     const newMessage = {
-      id: Date.now(),
-      sender: username,
+      userName: username,
       text: text,
-      sentAt: new Date().toLocaleTimeString(),
     };
 
     try {
