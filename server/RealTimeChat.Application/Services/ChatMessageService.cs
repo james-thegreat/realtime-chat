@@ -6,6 +6,12 @@ public class ChatMessageService
 {
     public ChatMessage Create(string userName, string text)
     {
+        if (string.IsNullOrWhiteSpace(userName) ||
+            string.IsNullOrWhiteSpace(text))
+        {
+            throw new ArgumentException("Username and text are required");
+        }
+
         return new ChatMessage
         {
             UserName = userName,
