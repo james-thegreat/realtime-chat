@@ -34,12 +34,7 @@ public class ChatHub : Hub
             return;
         }
 
-        var chatMessage = new ChatMessage
-        {
-            UserName = message.UserName,
-            Text = message.Text,
-            SentAtUtc = DateTime.UtcNow
-        };
+        var chatMessage = _chatMessageService.Create(message.UserName, message.Text);
 
         Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, SentAtUtc={chatMessage.SentAtUtc:o}");
 
