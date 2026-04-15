@@ -28,10 +28,17 @@ public class ChatHub : Hub
 
     public async Task SendMessage(ChatMessage message)
     {
+        try
+        {
         var chatMessage = _chatMessageService.Create(message.UserName, message.Text);
 
         Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, SentAtUtc={chatMessage.SentAtUtc:o}");
 
         await Clients.All.SendAsync("ReceiveMessage", chatMessage);
+        }
+        catch
+        {
+            return;
+        }
     }
 }
