@@ -1,4 +1,5 @@
 using RealTimeChat.Api.Hubs;
+using RealTimeChat.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSignalR();
+
+builder.Services.AddSingleton<ChatMessageService>();
 
 var app = builder.Build();
 
