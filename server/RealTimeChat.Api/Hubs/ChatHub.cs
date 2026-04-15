@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
-using RealTimeChat.Api.Models;
+using RealTimeChat.Domain.Models;
 using RealTimeChat.Application.Services;
 
 namespace RealTimeChat.Api.Hubs;
