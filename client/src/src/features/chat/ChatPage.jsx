@@ -9,6 +9,7 @@ function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState("Connecting");
   const connectionRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -23,21 +24,16 @@ function ChatPage() {
   }, [username]);
 
   useEffect(() => {
-    const connection = createChatConnection();
+    const connection = createChatConnection(
+      (message) => {
+        setMessages((prev) => [...prev, message]);
+      },
+      (error) => {
+        setErrorMessage(error);
+      }
+    );
+    
     connectionRef.current = connection;
-
-    connection.on("ReceiveMessage", (message) => {
-      console.log("Received from hub:", message);
-
-      const safeMessage = {
-        id: message.id || Date.now() + Math.random(),
-        userName: message.userName,
-        text: message.text,
-        sentAtUtc: message.sentAtUtc,
-      };
-
-      setMessages((prev) => [...prev, safeMessage]);
-    });
 
     const startConnection = async () => {
       try {
@@ -54,7 +50,6 @@ function ChatPage() {
     startConnection();
 
     return () => {
-      connection.off("ReceiveMessage");
       connection.stop();
     };
   }, []);
@@ -105,6 +100,7 @@ function ChatPage() {
         />
       </section>
 
+      {errorMessage && <p>{errorMessage}</p>}
       <MessageList messages={messages} />
       <MessageInput onSend={handleSendMessage} />
     </main>
