@@ -1,11 +1,19 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using RealTimeChat.Api.Models;
+using RealTimeChat.Application.Services;
 
 namespace RealTimeChat.Api.Hubs;
 
 public class ChatHub : Hub
 {
+    private readonly ChatMessageService _chatMessageService;
+
+    public ChatHub(ChatMessageService chatMessageService)
+    {
+        _chatMessageService = chatMessageService;
+    }
+
     public override async Task OnConnectedAsync()
     {
         Console.WriteLine($"Client connected: {Context.ConnectionId}");
