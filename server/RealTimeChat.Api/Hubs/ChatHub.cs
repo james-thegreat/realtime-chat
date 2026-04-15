@@ -30,14 +30,15 @@ public class ChatHub : Hub
     {
         try
         {
-        var chatMessage = _chatMessageService.Create(message.UserName, message.Text);
+            var chatMessage = _chatMessageService.Create(message.UserName, message.Text);
 
-        Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, SentAtUtc={chatMessage.SentAtUtc:o}");
+            Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, SentAtUtc={chatMessage.SentAtUtc:o}");
 
-        await Clients.All.SendAsync("ReceiveMessage", chatMessage);
+            await Clients.All.SendAsync("ReceiveMessage", chatMessage);
         }
-        catch
+        catch (ArgumentException)
         {
+            await Clients.Caller.SendAsync("ReceiveError", "Username and message text are required.");
             return;
         }
     }
