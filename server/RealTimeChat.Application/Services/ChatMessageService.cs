@@ -1,4 +1,4 @@
-using RealTimeChat.Api.Models;
+using RealTimeChat.Domain.Models;
 
 namespace RealTimeChat.Application.Services;
 
