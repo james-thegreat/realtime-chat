@@ -12,6 +12,7 @@ function ChatPage() {
   const connectionRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [typingUser, setTypingUser] = useState("");
+  const lastTypingSentRef = useRef(0);
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -34,6 +35,7 @@ function ChatPage() {
         setErrorMessage(error);
       },
       (userName) => {
+        console.log("typing received:", userName); // 👈 ADD THIS
         setTypingUser(userName);
       }
     );
@@ -58,6 +60,18 @@ function ChatPage() {
       connection.stop();
     };
   }, []);
+
+  useEffect(() => {
+    if (!typingUser) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setTypingUser("");
+    }, 1500);
+
+    return () => clearTimeout(timeoutId);
+  }, [typingUser]);
 
   useEffect(() => {
     if (!errorMessage) {
@@ -104,20 +118,29 @@ function ChatPage() {
   }
 
   async function handleTyping() {
-    if (!username.trim()) {
-      return;
-    }
+  const now = Date.now();
 
-    if (!connectionRef.current || connectionStatus !== "Connected") {
-      return;
-    }
-
-    try {
-      await connectionRef.current.invoke("NotifyTyping", username);
-    } catch (error) {
-      console.error("typing notify failed:", error);
-    }
+  // only send once every 1 second
+  if (now - lastTypingSentRef.current < 1000) {
+    return;
   }
+
+  lastTypingSentRef.current = now;
+
+  if (!username.trim()) {
+    return;
+  }
+
+  if (!connectionRef.current || connectionStatus !== "Connected") {
+    return;
+  }
+
+  try {
+    await connectionRef.current.invoke("NotifyTyping", username);
+  } catch (error) {
+    console.error("typing notify failed:", error);
+  }
+}
 
   console.log("Messages state:", messages);
 
@@ -139,6 +162,8 @@ function ChatPage() {
       </section>
 
       <ErrorBanner message={errorMessage} />
+      {/* {typingUser && <p>{typingUser} is typing...</p>} */}
+      {typingUser && <h2>{typingUser} is typing...</h2>}
       <MessageList messages={messages} />
       <MessageInput
         onSend={handleSendMessage}

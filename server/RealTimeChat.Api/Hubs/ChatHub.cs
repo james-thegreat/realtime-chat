@@ -26,6 +26,12 @@ public class ChatHub : Hub
         await base.OnDisconnectedAsync(exception);
     }
 
+    public async Task NotifyTyping(string userName)
+    {
+        Console.WriteLine($"{userName} is typing...");
+        await Clients.Others.SendAsync("ReceiveTyping", userName);
+    }
+
     public async Task SendMessage(ChatMessage message)
     {
         try
