@@ -11,6 +11,7 @@ function ChatPage() {
   const [connectionStatus, setConnectionStatus] = useState("Connecting");
   const connectionRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [typingUser, setTypingUser] = useState("");
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -31,6 +32,9 @@ function ChatPage() {
       },
       (error) => {
         setErrorMessage(error);
+      },
+      (userName) => {
+        setTypingUser(userName);
       }
     );
     
