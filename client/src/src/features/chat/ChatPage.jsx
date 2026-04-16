@@ -99,6 +99,11 @@ function ChatPage() {
     }
   }
 
+  public async Task NotifyTyping(string userName)
+  {
+      await Clients.Others.SendAsync("ReceiveTyping", userName);
+  }
+
   console.log("Messages state:", messages);
 
   return (
