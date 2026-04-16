@@ -108,7 +108,10 @@ function ChatPage() {
 
       <ErrorBanner message={errorMessage} />
       <MessageList messages={messages} />
-      <MessageInput onSend={handleSendMessage} />
+      <MessageInput 
+        onSend={handleSendMessage} 
+        onTyping={() => setErrorMessage("")}
+      />
     </main>
   );
 }
