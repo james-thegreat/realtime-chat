@@ -3,6 +3,7 @@ import ChatHeader from "./components/ChatHeader";
 import MessageInput from "./components/MessageInput";
 import MessageList from "./components/MessageList";
 import { createChatConnection } from "../../services/signalrConnection";
+import ErrorBanner from "./components/ErrorBanner";
 
 function ChatPage() {
   const [username, setUsername] = useState("");
@@ -102,7 +103,7 @@ function ChatPage() {
         />
       </section>
 
-      {errorMessage && <p>{errorMessage}</p>}
+      <ErrorBanner message={errorMessage} />
       <MessageList messages={messages} />
       <MessageInput onSend={handleSendMessage} />
     </main>
