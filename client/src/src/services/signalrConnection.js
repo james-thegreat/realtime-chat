@@ -7,7 +7,14 @@ export function createChatConnection(onMessageReceived, onErrorReceived) {
     .build();
 
   connection.on("ReceiveMessage", (message) => {
-    onMessageReceived(message);
+    const safeMessage = {
+      id: message.id || Date.now() + Math.random(),
+      userName: message.userName,
+      text: message.text,
+      sentAtUtc: message.sentAtUtc,
+    };
+
+    onMessageReceived(safeMessage);
   });
 
   connection.on("ReceiveError", (errorMessage) => {

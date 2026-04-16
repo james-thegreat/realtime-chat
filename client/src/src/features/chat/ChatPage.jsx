@@ -55,6 +55,8 @@ function ChatPage() {
   }, []);
 
   async function handleSendMessage(text) {
+    setErrorMessage("");
+
     console.log("handleSendMessage fired");
     console.log("username:", username);
     console.log("text:", text);
