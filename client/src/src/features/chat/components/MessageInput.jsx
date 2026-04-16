@@ -25,7 +25,7 @@ function MessageInput({ onSend, onTyping }) {
           value={text}
           onChange={(e) => {
             setText(e.target.value);
-            onTyping();
+            onTyping?.();
           }}
         />
         <button type="submit" disabled={!text.trim()}>

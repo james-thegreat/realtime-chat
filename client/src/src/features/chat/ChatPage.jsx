@@ -55,6 +55,18 @@ function ChatPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!errorMessage) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+
+    return () => clearTimeout(timeoutId);
+  }, [errorMessage]);
+
   async function handleSendMessage(text) {
     setErrorMessage("");
 
@@ -108,10 +120,10 @@ function ChatPage() {
 
       <ErrorBanner message={errorMessage} />
       <MessageList messages={messages} />
-      <MessageInput 
-        onSend={handleSendMessage} 
-        onTyping={() => setErrorMessage("")}
-      />
+      <MessageInput
+          onSend={handleSendMessage}
+          onTyping={() => setErrorMessage("")}
+        />
     </main>
   );
 }
