@@ -99,7 +99,10 @@ function ChatPage() {
           type="text"
           placeholder="Enter your name..."
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setErrorMessage("");
+          }}
         />
       </section>
 
