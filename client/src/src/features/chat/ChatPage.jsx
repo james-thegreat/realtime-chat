@@ -99,9 +99,20 @@ function ChatPage() {
     }
   }
 
-  public async Task NotifyTyping(string userName)
-  {
-      await Clients.Others.SendAsync("ReceiveTyping", userName);
+  async function handleTyping() {
+    if (!username.trim()) {
+      return;
+    }
+
+    if (!connectionRef.current || connectionStatus !== "Connected") {
+      return;
+    }
+
+    try {
+      await connectionRef.current.invoke("NotifyTyping", username);
+    } catch (error) {
+      console.error("typing notify failed:", error);
+    }
   }
 
   console.log("Messages state:", messages);
@@ -126,9 +137,12 @@ function ChatPage() {
       <ErrorBanner message={errorMessage} />
       <MessageList messages={messages} />
       <MessageInput
-          onSend={handleSendMessage}
-          onTyping={() => setErrorMessage("")}
-        />
+        onSend={handleSendMessage}
+        onTyping={() => {
+          setErrorMessage("");
+          handleTyping();
+        }}
+      />
     </main>
   );
 }
