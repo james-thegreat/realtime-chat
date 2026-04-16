@@ -76,7 +76,7 @@ function ChatPage() {
     console.log("connection state:", connectionRef.current?.state);
 
     if (!username.trim() || !text.trim()) {
-      console.log("blocked by validation");
+      setErrorMessage("Username and message text are required.");
       return;
     }
 
