@@ -4,6 +4,7 @@ export function createChatConnection(
   onMessageReceived,
   onErrorReceived,
   onTypingReceived,
+  onSystemMessageReceived
 ) {
   const connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:5044/chathub")
@@ -28,6 +29,10 @@ export function createChatConnection(
 
   connection.on("ReceiveTyping", (userName) => {
     onTypingReceived(userName);
+  });
+
+  connection.on("ReceiveSystemMessage", (text) => {
+    onSystemMessageReceived(text);
   });
 
   return connection;

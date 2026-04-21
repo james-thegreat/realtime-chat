@@ -41,8 +41,17 @@ function ChatPage() {
         setErrorMessage(error);
       },
       (userName) => {
-        console.log("typing received:", userName); // 👈 ADD THIS
         setTypingUser(userName);
+      },
+      (text) => {
+        const systemMessage = {
+          id: Date.now() + Math.random(),
+          userName: "System",
+          text: text,
+          sentAtUtc: new Date().toISOString(),
+        };
+
+        setMessages((prev) => [...prev, systemMessage]);
       }
     );
     
