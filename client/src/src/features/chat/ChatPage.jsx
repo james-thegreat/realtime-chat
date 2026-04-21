@@ -4,6 +4,7 @@ import MessageInput from "./components/MessageInput";
 import MessageList from "./components/MessageList";
 import { createChatConnection } from "../../services/signalrConnection";
 import ErrorBanner from "./components/ErrorBanner";
+import TypingIndicator from "./components/TypingIndicator";
 
 function ChatPage() {
   const [username, setUsername] = useState("");
@@ -30,6 +31,10 @@ function ChatPage() {
     const connection = createChatConnection(
       (message) => {
         setMessages((prev) => [...prev, message]);
+
+        if (message.userName === typingUser) {
+          setTypingUser("");
+        }
       },
       (error) => {
         setErrorMessage(error);
@@ -68,7 +73,7 @@ function ChatPage() {
 
     const timeoutId = setTimeout(() => {
       setTypingUser("");
-    }, 1500);
+    }, 2500);
 
     return () => clearTimeout(timeoutId);
   }, [typingUser]);
@@ -162,8 +167,7 @@ function ChatPage() {
       </section>
 
       <ErrorBanner message={errorMessage} />
-      {/* {typingUser && <p>{typingUser} is typing...</p>} */}
-      {typingUser && <h2>{typingUser} is typing...</h2>}
+      <TypingIndicator userName={typingUser} />
       <MessageList messages={messages} />
       <MessageInput
         onSend={handleSendMessage}
