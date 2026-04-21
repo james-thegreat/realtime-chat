@@ -14,6 +14,7 @@ function ChatPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [typingUser, setTypingUser] = useState("");
   const lastTypingSentRef = useRef(0);
+  const typingUserRef = useRef("");
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -32,7 +33,7 @@ function ChatPage() {
       (message) => {
         setMessages((prev) => [...prev, message]);
 
-        if (message.userName === typingUser) {
+        if (message.userName === typingUserRef.current) {
           setTypingUser("");
         }
       },
@@ -89,6 +90,10 @@ function ChatPage() {
 
     return () => clearTimeout(timeoutId);
   }, [errorMessage]);
+
+  useEffect(() => {
+    typingUserRef.current = typingUser;
+  }, [typingUser]);
 
   async function handleSendMessage(text) {
     setErrorMessage("");
