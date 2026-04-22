@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using RealTimeChat.Domain.Models;
 using RealTimeChat.Application.Services;
 
+
 namespace RealTimeChat.Api.Hubs;
 
 public class ChatHub : Hub
 {
     private readonly ChatMessageService _chatMessageService;
+    private static readonly Dictionary<string, string> _connections = new();
 
     public ChatHub(ChatMessageService chatMessageService)
     {
@@ -17,14 +19,20 @@ public class ChatHub : Hub
     public override async Task OnConnectedAsync()
     {
         Console.WriteLine($"Client connected: {Context.ConnectionId}");
-        await Clients.Others.SendAsync("ReceiveSystemMessage", "A user joined the chat.");
         await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        Console.WriteLine($"Client disconnected: {Context.ConnectionId}");
-        await Clients.Others.SendAsync("ReceiveSystemMessage", "A user left the chat.");
+        if (_connections.TryGetValue(Context.ConnectionId, out var userName))
+        {
+            _connections.Remove(Context.ConnectionId);
+
+            Console.WriteLine($"{userName} left");
+
+            await Clients.Others.SendAsync("ReceiveSystemMessage", $"{userName} left the chat");
+        }
+
         await base.OnDisconnectedAsync(exception);
     }
 
@@ -49,5 +57,14 @@ public class ChatHub : Hub
             await Clients.Caller.SendAsync("ReceiveError", "Username and message text are required.");
             return;
         }
+    }
+
+    public async Task JoinChat(string userName)
+    {
+        _connections[Context.ConnectionId] = userName;
+
+        Console.WriteLine($"{userName} joined");
+
+        await Clients.Others.SendAsync("ReceiveSystemMessage", $"{userName} joined the chat");
     }
 }

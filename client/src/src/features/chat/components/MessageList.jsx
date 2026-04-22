@@ -9,9 +9,13 @@ function MessageList({ messages }) {
         <p>No messages yet.</p>
       ) : (
         <ul>
-          {messages.map((message) => (
-            <MessageItem key={message.id} message={message} />
-          ))}
+          {messages.map((message) => {
+            if (message.type === "system") {
+              return <p key={message.id}>{message.text}</p>;
+            }
+
+            return <MessageItem key={message.id} message={message} />;
+          })}
         </ul>
       )}
     </section>

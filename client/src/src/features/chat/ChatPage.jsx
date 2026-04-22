@@ -28,53 +28,58 @@ function ChatPage() {
     localStorage.setItem("username", username);
   }, [username]);
 
-  useEffect(() => {
-    const connection = createChatConnection(
-      (message) => {
-        setMessages((prev) => [...prev, message]);
+ useEffect(() => {
+  if (!username) {
+    return;
+  }
 
-        if (message.userName === typingUserRef.current) {
-          setTypingUser("");
-        }
-      },
-      (error) => {
-        setErrorMessage(error);
-      },
-      (userName) => {
-        setTypingUser(userName);
-      },
-      (text) => {
-        const systemMessage = {
-          id: Date.now() + Math.random(),
-          userName: "System",
-          text: text,
-          sentAtUtc: new Date().toISOString(),
-        };
+  const connection = createChatConnection(
+    (message) => {
+      setMessages((prev) => [...prev, message]);
 
-        setMessages((prev) => [...prev, systemMessage]);
+      if (message.userName === typingUserRef.current) {
+        setTypingUser("");
       }
-    );
-    
-    connectionRef.current = connection;
+    },
+    (error) => {
+      setErrorMessage(error);
+    },
+    (userName) => {
+      setTypingUser(userName);
+    },
+    (text) => {
+      const systemMessage = {
+        id: Date.now() + Math.random(),
+        type: "system",
+        text: text,
+        sentAtUtc: new Date().toISOString(),
+      };
 
-    const startConnection = async () => {
-      try {
-        console.log("Starting SignalR connection...");
-        await connection.start();
-        console.log("SignalR connected");
-        setConnectionStatus("Connected");
-      } catch (error) {
-        console.error("Failed to connect to SignalR:", error);
-        setConnectionStatus("Disconnected");
-      }
-    };
+      setMessages((prev) => [...prev, systemMessage]);
+    }
+  );
 
-    startConnection();
+  connectionRef.current = connection;
 
-    return () => {
-      connection.stop();
-    };
-  }, []);
+  const startConnection = async () => {
+    try {
+      console.log("Starting SignalR connection...");
+      await connection.start();
+      await connection.invoke("JoinChat", username);
+      console.log("SignalR connected");
+      setConnectionStatus("Connected");
+    } catch (error) {
+      console.error("Failed to connect to SignalR:", error);
+      setConnectionStatus("Disconnected");
+    }
+  };
+
+  startConnection();
+
+  return () => {
+    connection.stop();
+  };
+}, [username]);
 
   useEffect(() => {
     if (!typingUser) {
