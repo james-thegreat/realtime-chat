@@ -42,4 +42,24 @@ public class ChatMessageServiceTests
             service.Create("James", "   ")
         );
     }
+
+    [Fact]
+    public void Create_WithEmptyUserName_ThrowsException()
+    {
+        var service = new ChatMessageService();
+
+        Assert.Throws<ArgumentException>(() => 
+            service.Create("", "Hello world")
+        );
+    }
+
+    [Fact]
+    public void Create_WithWhitespaceUserName_ThrowsException()
+    {
+        var service = new ChatMessageService();
+
+        Assert.Throws<ArgumentException>(() =>
+            service.Create("   ", "Hello world")
+        );
+    }
 }
