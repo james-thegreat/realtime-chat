@@ -46,7 +46,7 @@ public class ChatHub : Hub
     {
         try
         {
-            var chatMessage = _chatMessageService.Create(message.UserName, message.Text);
+            var chatMessage = await _chatMessageService.CreateAsync(message.UserName, message.Text);
 
             Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, SentAtUtc={chatMessage.SentAtUtc:o}");
 

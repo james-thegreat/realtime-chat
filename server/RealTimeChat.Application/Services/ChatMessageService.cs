@@ -1,10 +1,18 @@
+using RealTimeChat.Application.Abstractions;
 using RealTimeChat.Domain.Models;
 
 namespace RealTimeChat.Application.Services;
 
 public class ChatMessageService
 {
-    public ChatMessage Create(string userName, string text)
+    private readonly IChatMessageRepository _chatMessageRepository;
+
+    public ChatMessageService(IChatMessageRepository chatMessageRepository)
+    {
+        _chatMessageRepository = chatMessageRepository;
+    }
+
+    public async Task<ChatMessage> CreateAsync(string userName, string text)
     {
         if (string.IsNullOrWhiteSpace(userName) ||
             string.IsNullOrWhiteSpace(text))
@@ -12,11 +20,15 @@ public class ChatMessageService
             throw new ArgumentException("Username and text are required");
         }
 
-        return new ChatMessage
+        var chatMessage = new ChatMessage
         {
             UserName = userName,
             Text = text,
             SentAtUtc = DateTime.UtcNow
         };
+
+        await _chatMessageRepository.SaveAsync(chatMessage);
+
+        return chatMessage;
     }
 }

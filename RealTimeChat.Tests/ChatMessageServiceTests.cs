@@ -1,17 +1,24 @@
 ﻿using RealTimeChat.Application.Services;
+using RealTimeChat.Application.Abstractions;
+using RealTimeChat.Domain.Models;
 
 namespace RealTimeChat.Tests;
 
 public class ChatMessageServiceTests
 {
-    [Fact]
-    public void Create_WithValidInput_ReturnsChatMessage()
-    {
-        // Arrange
-        var service = new ChatMessageService();
+    private readonly ChatMessageService _service;
 
+    public ChatMessageServiceTests()
+    {
+        var fakeRepo = new FakeChatMessageRepository();
+        _service = new ChatMessageService(fakeRepo);
+    }
+
+    [Fact]
+    public async Task Create_WithValidInput_ReturnsChatMessage()
+    {
         // Act
-        var result = service.Create("James", "Hello world");
+        var result = await _service.CreateAsync("James", "Hello world");
 
         // Assert
         Assert.NotNull(result);
@@ -20,46 +27,34 @@ public class ChatMessageServiceTests
     }
 
     [Fact]
-    public void Create_WithEmptyMessage_ThrowsException()
+    public async Task Create_WithEmptyMessage_ThrowsException()
     {
-        // Arrange
-        var service = new ChatMessageService();
-
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() =>
-            service.Create("James", "")
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            _service.CreateAsync("James", "")
         );
     }
 
     [Fact]
-    public void Create_WithWhitespaceMessage_ThrowsException()
+    public async Task Create_WithWhitespaceMessage_ThrowsException()
     {
-        // Arrange
-        var service = new ChatMessageService();
-
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() =>
-            service.Create("James", "   ")
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            _service.CreateAsync("James", "   ")
         );
     }
 
     [Fact]
-    public void Create_WithEmptyUserName_ThrowsException()
+    public async Task Create_WithEmptyUserName_ThrowsException()
     {
-        var service = new ChatMessageService();
-
-        Assert.Throws<ArgumentException>(() => 
-            service.Create("", "Hello world")
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            _service.CreateAsync("", "Hello world")
         );
     }
 
     [Fact]
-    public void Create_WithWhitespaceUserName_ThrowsException()
+    public async Task Create_WithWhitespaceUserName_ThrowsException()
     {
-        var service = new ChatMessageService();
-
-        Assert.Throws<ArgumentException>(() =>
-            service.Create("   ", "Hello world")
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            _service.CreateAsync("   ", "Hello world")
         );
     }
 }
