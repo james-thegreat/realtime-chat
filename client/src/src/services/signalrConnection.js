@@ -7,7 +7,7 @@ export function createChatConnection(
   onSystemMessageReceived
 ) {
   const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:5044/chathub")
+    .withUrl(`${import.meta.env.VITE_API_BASE_URL}/chathub`)
     .withAutomaticReconnect()
     .build();
 
