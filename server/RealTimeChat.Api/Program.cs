@@ -1,5 +1,8 @@
 using RealTimeChat.Api.Hubs;
 using RealTimeChat.Application.Services;
+using Microsoft.EntityFrameworkCore;
+using RealTimeChat.Application.Abstractions;
+using RealTimeChat.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +22,11 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSignalR();
 
-builder.Services.AddSingleton<ChatMessageService>();
+builder.Services.AddDbContext<RealTimeChatDbContext>(options =>
+    options.UseSqlite("Data Source=realtimechat.db"));
 
+builder.Services.AddScoped<IChatMessageRepository, EfChatMessageRepository>();
+builder.Services.AddScoped<ChatMessageService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

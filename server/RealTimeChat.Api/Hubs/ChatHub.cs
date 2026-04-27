@@ -57,6 +57,11 @@ public class ChatHub : Hub
             await Clients.Caller.SendAsync("ReceiveError", "Username and message text are required.");
             return;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            await Clients.Caller.SendAsync("ReceiveError", "Server error while sending message.");
+        }
     }
 
     public async Task JoinChat(string userName)

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RealTimeChat.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fcb2f835d47d7805cd1be2689cd819a3252663c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d06d68ad2365c4e3074ed2ce14ac59ad896dd56")]
 [assembly: System.Reflection.AssemblyProductAttribute("RealTimeChat.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RealTimeChat.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
