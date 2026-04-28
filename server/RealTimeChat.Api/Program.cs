@@ -15,7 +15,8 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(
                 "http://localhost:5173",
-                "https://localhost:5173"
+                "https://localhost:5173",
+                "https://happy-sea-0ddee0400.7.azurestaticapps.net"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -30,7 +31,6 @@ builder.Services.AddDbContext<RealTimeChatDbContext>(options =>
 
 builder.Services.AddScoped<IChatMessageRepository, EfChatMessageRepository>();
 builder.Services.AddScoped<ChatMessageService>();
-
 
 var app = builder.Build();
 
