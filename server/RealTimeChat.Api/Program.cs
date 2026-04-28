@@ -34,6 +34,13 @@ builder.Services.AddScoped<ChatMessageService>();
 
 var app = builder.Build();
 
+// 🔥 Ensure database is created on startup (important for Azure)
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<RealTimeChatDbContext>();
+    dbContext.Database.EnsureCreated();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
