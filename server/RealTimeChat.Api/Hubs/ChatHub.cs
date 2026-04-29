@@ -70,6 +70,10 @@ public class ChatHub : Hub
 
         Console.WriteLine($"{userName} joined");
 
+        var recentMessages = await _chatMessageService.GetRecentMessagesAsync(50);
+
+        await Clients.Caller.SendAsync("ReceiveMessageHistory", recentMessages);
+
         await Clients.Others.SendAsync("ReceiveSystemMessage", $"{userName} joined the chat");
     }
 }

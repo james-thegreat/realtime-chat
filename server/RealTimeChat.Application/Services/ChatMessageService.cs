@@ -31,4 +31,9 @@ public class ChatMessageService
 
         return chatMessage;
     }
+
+    public async Task<List<ChatMessage>> GetRecentMessagesAsync(int count)
+    {
+        return await _chatMessageRepository.GetRecentMessagesAsync(count);
+    }
 }

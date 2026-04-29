@@ -56,6 +56,9 @@ function ChatPage() {
       };
 
       setMessages((prev) => [...prev, systemMessage]);
+    },
+    (history) => {
+      setMessages(history);
     }
   );
 

@@ -4,7 +4,8 @@ export function createChatConnection(
   onMessageReceived,
   onErrorReceived,
   onTypingReceived,
-  onSystemMessageReceived
+  onSystemMessageReceived,
+  onMessageHistoryReceived,
 ) {
   const connection = new signalR.HubConnectionBuilder()
     .withUrl(`${import.meta.env.VITE_API_BASE_URL}/chathub`)
@@ -33,6 +34,17 @@ export function createChatConnection(
 
   connection.on("ReceiveSystemMessage", (text) => {
     onSystemMessageReceived(text);
+  });
+
+  connection.on("ReceiveMessageHistory", (history) => {
+    const safeHistory = history.map((message) => ({
+      id: message.id || Date.now() + Math.random(),
+      userName: message.userName,
+      text: message.text,
+      sentAtUtc: message.sentAtUtc,
+    }));
+
+    onMessageHistoryReceived(safeHistory);
   });
 
   return connection;
