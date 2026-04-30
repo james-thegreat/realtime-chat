@@ -8,6 +8,7 @@ import TypingIndicator from "./components/TypingIndicator";
 
 function ChatPage() {
   const [username, setUsername] = useState("");
+  const [roomName, setRoomName] = useState("Lobby");
   const [messages, setMessages] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState("Connecting");
   const connectionRef = useRef(null);
@@ -68,7 +69,7 @@ function ChatPage() {
     try {
       console.log("Starting SignalR connection...");
       await connection.start();
-      await connection.invoke("JoinChat", username);
+      await connection.invoke("JoinChat", username, roomName);
       console.log("SignalR connected");
       setConnectionStatus("Connected");
     } catch (error) {
@@ -82,7 +83,7 @@ function ChatPage() {
   return () => {
     connection.stop();
   };
-}, [username]);
+}, [username, roomName]);
 
   useEffect(() => {
     if (!typingUser) {
@@ -133,6 +134,7 @@ function ChatPage() {
     const newMessage = {
       userName: username,
       text: text,
+      roomName: roomName,
     };
 
     try {
@@ -183,6 +185,19 @@ function ChatPage() {
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
+            setErrorMessage("");
+          }}
+        />
+      </section>
+      <section>
+        <h2>Room</h2>
+        <input
+          type="text"
+          placeholder="Enter room name..."
+          value={roomName}
+          onChange={(e) => {
+            setRoomName(e.target.value);
+            setMessages([]);
             setErrorMessage("");
           }}
         />

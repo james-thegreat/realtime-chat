@@ -19,9 +19,10 @@ public class EfChatMessageRepository : IChatMessageRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<ChatMessage>> GetRecentMessagesAsync(int count)
+    public async Task<List<ChatMessage>> GetRecentMessagesAsync(string roomName, int count)
     {
         return await _dbContext.ChatMessages
+            .Where(message => message.RoomName == roomName)
             .OrderByDescending(message => message.SentAtUtc)
             .Take(count)
             .OrderBy(message => message.SentAtUtc)

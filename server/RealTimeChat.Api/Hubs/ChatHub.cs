@@ -9,7 +9,10 @@ namespace RealTimeChat.Api.Hubs;
 public class ChatHub : Hub
 {
     private readonly ChatMessageService _chatMessageService;
-    private static readonly Dictionary<string, string> _connections = new();
+
+    private static readonly Dictionary<string, UserConnection> _connections = new();
+
+    private record UserConnection(string UserName, string RoomName);
 
     public ChatHub(ChatMessageService chatMessageService)
     {
@@ -24,13 +27,17 @@ public class ChatHub : Hub
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        if (_connections.TryGetValue(Context.ConnectionId, out var userName))
+        if (_connections.TryGetValue(Context.ConnectionId, out var connection))
         {
             _connections.Remove(Context.ConnectionId);
 
-            Console.WriteLine($"{userName} left");
+            Console.WriteLine($"{connection.UserName} left room {connection.RoomName}");
 
-            await Clients.Others.SendAsync("ReceiveSystemMessage", $"{userName} left the chat");
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, connection.RoomName);
+
+            await Clients
+                .Group(connection.RoomName)
+                .SendAsync("ReceiveSystemMessage", $"{connection.UserName} left {connection.RoomName}");
         }
 
         await base.OnDisconnectedAsync(exception);
@@ -46,11 +53,17 @@ public class ChatHub : Hub
     {
         try
         {
-            var chatMessage = await _chatMessageService.CreateAsync(message.UserName, message.Text);
+            var chatMessage = await _chatMessageService.CreateAsync(
+                message.UserName,
+                message.Text,
+                message.RoomName
+            );
 
-            Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, SentAtUtc={chatMessage.SentAtUtc:o}");
+            Console.WriteLine($"Broadcasting message: UserName={chatMessage.UserName}, Text={chatMessage.Text}, Room={message.RoomName}, SentAtUtc={chatMessage.SentAtUtc:o}");
 
-            await Clients.All.SendAsync("ReceiveMessage", chatMessage);
+            await Clients
+                .Group(message.RoomName)
+                .SendAsync("ReceiveMessage", chatMessage);
         }
         catch (ArgumentException)
         {
@@ -64,16 +77,20 @@ public class ChatHub : Hub
         }
     }
 
-    public async Task JoinChat(string userName)
+    public async Task JoinChat(string userName, string roomName)
     {
-        _connections[Context.ConnectionId] = userName;
+        _connections[Context.ConnectionId] = new UserConnection(userName, roomName);
 
-        Console.WriteLine($"{userName} joined");
+        await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
 
-        var recentMessages = await _chatMessageService.GetRecentMessagesAsync(50);
+        Console.WriteLine($"{userName} joined room {roomName}");
+
+        var recentMessages = await _chatMessageService.GetRecentMessagesAsync(roomName, 50);
 
         await Clients.Caller.SendAsync("ReceiveMessageHistory", recentMessages);
 
-        await Clients.Others.SendAsync("ReceiveSystemMessage", $"{userName} joined the chat");
+        await Clients
+            .Group(roomName)
+            .SendAsync("ReceiveSystemMessage", $"{userName} joined {roomName}");
     }
 }
