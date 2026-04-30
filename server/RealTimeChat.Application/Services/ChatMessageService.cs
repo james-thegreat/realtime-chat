@@ -12,18 +12,20 @@ public class ChatMessageService
         _chatMessageRepository = chatMessageRepository;
     }
 
-    public async Task<ChatMessage> CreateAsync(string userName, string text)
+    public async Task<ChatMessage> CreateAsync(string userName, string text, string roomName)
     {
         if (string.IsNullOrWhiteSpace(userName) ||
-            string.IsNullOrWhiteSpace(text))
+            string.IsNullOrWhiteSpace(text) ||
+            string.IsNullOrWhiteSpace(roomName))
         {
-            throw new ArgumentException("Username and text are required");
+            throw new ArgumentException("Username, text, and room name are required");
         }
 
         var chatMessage = new ChatMessage
         {
             UserName = userName,
             Text = text,
+            RoomName = roomName,
             SentAtUtc = DateTime.UtcNow
         };
 
@@ -32,8 +34,13 @@ public class ChatMessageService
         return chatMessage;
     }
 
-    public async Task<List<ChatMessage>> GetRecentMessagesAsync(int count)
+    public async Task<List<ChatMessage>> GetRecentMessagesAsync(string roomName, int count)
     {
-        return await _chatMessageRepository.GetRecentMessagesAsync(count);
+        if (string.IsNullOrWhiteSpace(roomName))
+        {
+            throw new ArgumentException("Room name is required");
+        }
+
+        return await _chatMessageRepository.GetRecentMessagesAsync(roomName, count);
     }
 }

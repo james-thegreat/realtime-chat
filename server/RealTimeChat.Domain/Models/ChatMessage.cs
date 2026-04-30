@@ -8,5 +8,7 @@ public class ChatMessage
 
     public string Text { get; set; } = string.Empty;
 
+    public string RoomName { get; set; } = string.Empty;
+
     public DateTime SentAtUtc { get; set; }
 }

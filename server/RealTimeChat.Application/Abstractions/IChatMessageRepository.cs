@@ -6,5 +6,5 @@ public interface IChatMessageRepository
 {
     Task SaveAsync(ChatMessage message);
 
-    Task<List<ChatMessage>> GetRecentMessagesAsync(int count);
+    Task<List<ChatMessage>> GetRecentMessagesAsync(string roomName, int count);
 }
