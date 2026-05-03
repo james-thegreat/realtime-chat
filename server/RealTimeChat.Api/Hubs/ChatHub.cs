@@ -46,7 +46,7 @@ public class ChatHub : Hub
     public async Task NotifyTyping(string userName)
     {
         Console.WriteLine($"{userName} is typing...");
-        await Clients.Others.SendAsync("ReceiveTyping", userName);
+        await Clients.Others.SendAsync("ReceiveTyping", userName, roomNumber);
     }
 
     public async Task SendMessage(ChatMessage message)
