@@ -165,7 +165,7 @@ function ChatPage() {
   }
 
   try {
-    await connectionRef.current.invoke("NotifyTyping", username);
+    await connectionRef.current.invoke("NotifyTyping", username, roomName);
   } catch (error) {
     console.error("typing notify failed:", error);
   }
