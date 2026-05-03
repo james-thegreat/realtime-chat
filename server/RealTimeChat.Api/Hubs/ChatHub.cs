@@ -43,10 +43,13 @@ public class ChatHub : Hub
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task NotifyTyping(string userName)
+    public async Task NotifyTyping(string userName, string roomName)
     {
-        Console.WriteLine($"{userName} is typing...");
-        await Clients.Others.SendAsync("ReceiveTyping", userName, roomNumber);
+        Console.WriteLine($"{userName} is typing in {roomName}...");
+
+        await Clients
+            .OthersInGroup(roomName)
+            .SendAsync("ReceiveTyping", userName);
     }
 
     public async Task SendMessage(ChatMessage message)
