@@ -26,8 +26,12 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSignalR();
 
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Data Source=realtimechat.db";
+
 builder.Services.AddDbContext<RealTimeChatDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(connectionString));
 
 builder.Services.AddScoped<IChatMessageRepository, EfChatMessageRepository>();
 builder.Services.AddScoped<ChatMessageService>();
