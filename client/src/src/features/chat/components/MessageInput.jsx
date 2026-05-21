@@ -15,25 +15,29 @@ function MessageInput({ onSend, onTyping }) {
   }
 
   return (
-    <section>
-      <h2>Send a message</h2>
+  <section className="message-input-section">
+    <form className="message-input-form" onSubmit={handleSubmit}>
+      <input
+        className="message-input"
+        type="text"
+        placeholder="Type a message..."
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value);
+          onTyping?.();
+        }}
+      />
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-            onTyping?.();
-          }}
-        />
-        <button type="submit" disabled={!text.trim()}>
-          Send
-        </button>
-      </form>
-    </section>
-  );
+      <button
+        className="send-button"
+        type="submit"
+        disabled={!text.trim()}
+      >
+        Send
+      </button>
+    </form>
+  </section>
+);
 }
 
 export default MessageInput;

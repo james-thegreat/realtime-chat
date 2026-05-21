@@ -6,6 +6,7 @@ import { createChatConnection } from "../../services/signalrConnection";
 import ErrorBanner from "./components/ErrorBanner";
 import TypingIndicator from "./components/TypingIndicator";
 
+
 function ChatPage() {
   const [username, setUsername] = useState("");
   const [roomName, setRoomName] = useState("Lobby");
@@ -16,6 +17,7 @@ function ChatPage() {
   const [typingUser, setTypingUser] = useState("");
   const lastTypingSentRef = useRef(0);
   const typingUserRef = useRef("");
+  
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("username");
@@ -174,45 +176,56 @@ function ChatPage() {
   console.log("Messages state:", messages);
 
   return (
-    <main>
-      <ChatHeader connectionStatus={connectionStatus} />
+    <main className="chat-page">
 
-      <section>
-        <h2>Your Name</h2>
-        <input
-          type="text"
-          placeholder="Enter your name..."
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value);
-            setErrorMessage("");
-          }}
-        />
-      </section>
-      <section>
-        <h2>Room</h2>
-        <input
-          type="text"
-          placeholder="Enter room name..."
-          value={roomName}
-          onChange={(e) => {
-            setRoomName(e.target.value);
-            setMessages([]);
-            setErrorMessage("");
-          }}
-        />
-      </section>
+      <div className="chat-container">
 
-      <ErrorBanner message={errorMessage} />
-      <TypingIndicator userName={typingUser} />
-      <MessageList messages={messages} />
-      <MessageInput
-        onSend={handleSendMessage}
-        onTyping={() => {
-          setErrorMessage("");
-          handleTyping();
-        }}
-      />
+        <ChatHeader connectionStatus={connectionStatus} />
+
+        <section>
+          <h2>Your Name</h2>
+          <input
+            type="text"
+            placeholder="Enter your name..."
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setErrorMessage("");
+            }}
+            />
+        </section>
+        <section>
+          <h2>Room</h2>
+          <input
+            type="text"
+            placeholder="Enter room name..."
+            value={roomName}
+            onChange={(e) => {
+              setRoomName(e.target.value);
+              setMessages([]);
+              setErrorMessage("");
+            }}
+            />
+        </section>
+        
+          <div className="chat-body">
+            <div className="chat-messages-area">
+              <ErrorBanner message={errorMessage} />
+              <TypingIndicator userName={typingUser} />
+              <MessageList messages={messages} currentUsername={username} />
+            </div>
+
+            <div className="chat-input-area">
+              <MessageInput
+                onSend={handleSendMessage}
+                onTyping={() => {
+                  setErrorMessage("");
+                  handleTyping();
+                }}
+              />
+            </div>
+          </div>
+        </div>
     </main>
   );
 }

@@ -1,22 +1,41 @@
+import { useEffect, useRef } from "react";
 import MessageItem from "./MessageItem";
 
-function MessageList({ messages }) {
-  return (
-    <section>
-      <h2>Messages</h2>
+function MessageList({ messages, currentUsername }) {
+  const bottomRef = useRef(null);
 
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
+
+  return (
+    <section className="message-list">
       {messages.length === 0 ? (
-        <p>No messages yet.</p>
+        <p className="empty-messages">No messages yet.</p>
       ) : (
-        <ul>
+        <div>
           {messages.map((message) => {
             if (message.type === "system") {
-              return <p key={message.id}>{message.text}</p>;
+              return (
+                <p key={message.id} className="system-message">
+                  {message.text}
+                </p>
+              );
             }
 
-            return <MessageItem key={message.id} message={message} />;
+            return (
+              <MessageItem
+                key={message.id}
+                message={message}
+                isOwnMessage={message.userName === currentUsername}
+              />
+            );
           })}
-        </ul>
+
+          <div ref={bottomRef}></div>
+        </div>
       )}
     </section>
   );
